@@ -1,1 +1,1 @@
-# kaoyan_math_II_typst_anki_workbook
+# 考研数学二 Typst & Anki 习题册

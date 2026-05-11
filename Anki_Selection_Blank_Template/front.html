@@ -16,6 +16,7 @@
 </div>
 
 <div id="settingsModal" class="modal"></div>
+<div id="hidden-options" style="display: none;">{{选项}}</div>
 
 <script>
   var DEFAULT_SHOW_QUESTION_TYPE = '0'
@@ -35,7 +36,7 @@
   var autoFlip = DEFAULT_AUTO_FLIP
   var isDelayOptionComing = false
 
-  function showFrontOptions(hideOption, randomOption, delayOption) {
+function showFrontOptions(hideOption, randomOption, delayOption) {
     var keySeq = []
     var optionObjs = getOptionObjs(randomOption)
     initEmptyOptionList(optionObjs)
@@ -44,7 +45,7 @@
       var _optionObj = optionObjs[i]
       var _option = _optionObj.label
       if (hideOption === '1') {
-        _option = '' // 直接清空内容，依靠 CSS 伪元素显示 A/B/C/D
+        _option = '' 
       }
       liList += "<li id='" + _optionObj.key + "' class='option' onclick='markSelected(this)'><div class='math-scroll-wrapper'>" + _option + "</div></li>"
       keySeq.push(_optionObj.key)
@@ -52,19 +53,24 @@
     if (Persistence.isAvailable()) {
       Persistence.setItem('ANKI-OPTIONS-ORDER', keySeq.toString())
     }
+    
+    // 将选项放入页面，并强制 MathJax 重新渲染公式
+    var injectAndRender = function() {
+      document.getElementById("front-options").innerHTML = liList;
+      if (typeof MathJax !== "undefined" && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+    }
+
     if (delayOption === '1') {
       isDelayOptionComing = true
       setTimeout(function () {
-        document.getElementById("front-options").innerHTML = liList
+        injectAndRender();
         isDelayOptionComing = false
       }, 1500)
     } else {
       if (isDelayOptionComing) {
-        setTimeout(function () {
-          document.getElementById("front-options").innerHTML = liList
-        }, 1500)
+        setTimeout(injectAndRender, 1500)
       } else {
-        document.getElementById("front-options").innerHTML = liList
+        injectAndRender();
       }
     }
   }
@@ -77,14 +83,16 @@
     document.getElementById("front-options").innerHTML = liList
   }
 
-  function getOptionObjs(randomOption) {
-    var optionArray = '{{选项}}'.trim().split("||")
-    var optionObjs = []
-    for (var i in optionArray) {
+function getOptionObjs(randomOption) {
+    // 从隐藏盒子中安全读取数据，避免引号和反斜杠破坏代码
+    var rawHtml = document.getElementById("hidden-options").innerHTML;
+    var optionArray = rawHtml.split("||");
+    var optionObjs = [];
+    for (var i = 0; i < optionArray.length; i++) {
       optionObjs.push({
-        key: Number.parseInt(i) + 1,
-        label: optionArray[i]
-      })
+        key: i + 1,
+        label: optionArray[i].trim()
+      });
     }
     if (randomOption === '1') {
       for (let i = 1; i < optionObjs.length; i++) {

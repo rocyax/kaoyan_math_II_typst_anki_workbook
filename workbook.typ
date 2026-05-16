@@ -1,6 +1,7 @@
 #import "@preview/mitex:0.2.6"
 #import "@preview/pinit:0.2.2"
 #import "@preview/cetz:0.2.2"
+#import "@preview/physica:0.9.8"
 
 //函数图像
 #import "@preview/simple-plot:0.3.0": plot
@@ -374,7 +375,7 @@ bodyfmt: proof-bodyfmt,
 
   配合Anki复习效果更佳
 
-  当前进度: #strong[不定积分] 
+  当前进度: #strong[定积分] 
 ]
 
 //行间公式左对齐
@@ -655,6 +656,19 @@ $
 
 = 导数与微分
 
+== 导数计算题
+
+#prob-box[设$display(f(x)=x+(x-1)arcsin sqrt(frac(x,x+1)))$, 求$f'(1)$]
+
+$
+f'(1) &= lim_(x->1) frac(x+(x-1)arcsin sqrt(frac(x,x+1))-1,x-1)\
+&= lim_(x->1)frac(x-1,x-1) + lim_(x->1)frac((x-1)arcsin sqrt(frac(x,x+1)),x-1) = 1+ pi/4
+$
+
+#prob-box[求$display(tan(x+y+pi/4)="e"^y)$在$(0,0)$处的切线方程是]
+
+设切线方程$y-0=k(x-0)$, 对隐函数求导得$y'=-2$, 所以方程为$y=-2x$
+
 == 导数概念题
 
 #prob-box[设$display(f(x) = cases(frac(abs(x^(2)- 1), x - 1)\,& x != 1, 2\,& x = 1,))$, 则在点$x=1$处函数$f(x)$为
@@ -677,6 +691,51 @@ $ lim_(x->1^+)f(x)= frac(x^2-1,x-1)= x + 1 = 2\
  $
 
 由于函数左右极限不相等, $display(lim_(x->1)f(x))$不存在, 故函数在$x=1$处不连续.
+
+#prob-box[设函数$f(x)$对任意的$x$均满足等式$f(1+x)=a f(x)$, 且有$f'(0)=b$, 其中$a,b$为非零常数, 则
+
+#grid(
+  columns: (1fr, 1fr),  // 分为平分的左右两栏
+  row-gutter: 1em,    // 设置行间距，让公式看起来不拥挤
+
+[A. $f(x)$在$x=1$不可导],
+[B. $f(x)$在$x=1$可导, 且$f'(1)=a$],
+[C. $f(x)$在$x=1$可导, 且$f'(1)=b$],
+[D. $f(x)$在$x=1$可导, 且$f'(1)=a b$],
+)
+]
+
+当$x=0$时, 有$f(1)=a f(0)$
+
+$
+f'(1) = lim_(x->0)frac(f(1+x)-f(1),x) = a frac(f(x)-f(0),x) = a b
+$
+
+#prob-box[$f'(0)$存在, 且$f(0)=0$, 则$ lim_(x->0) frac(f(1-cos 2x), x sin x)= #h(2em) lim_(x->0)frac(f(x^2),sin^2 (x/3))= $]
+
+$
+lim_(x->0) frac(1-cos 2x, x sin x) = lim_(x->0) frac(f(1-cos 2x) - f(0),1 - cos 2x - 0) dot frac(1 - cos 2x,x sin x) = 2 f'(0)\
+lim_(x->0)frac(f(x^2),sin^2 (x/3)) = lim_(x->0)frac(f(x^2)-f(0),x^2-0) dot frac(x^2,sin^2 (x/3)) = 9 f'(0)
+$
+
+#prob-box[已知$alpha,beta$是常数, $f(x)$可导, 求$
+lim_(Delta->0)frac(f(x+alpha Delta x)-f(x-beta Delta x),Delta x)
+$]
+
+$
+lim_(Delta->0)frac(f(x+alpha Delta x)-f(x-beta Delta x),Delta x) &= alpha lim_(Delta->0)frac(f(x+alpha Delta x)-f(x),alpha Delta x) + beta lim_(Delta->0)frac(f(x- beta Delta x)-f(x),- beta Delta x)\
+&= (alpha + beta)f'(x)
+$
+
+#prob-box[若$display(f(x)= cases(g(x)cos 1/x\,& x eq.not 0 ,0 \, & x eq 0))$, 而$g(0)=g'(0)=0$, 则$f'(0)=$]
+
+$
+f'(0) = lim_(x->0)frac(f(x)-f(0), x-0) = lim_(x->0) frac(g(x)cos 1/x , x)=lim_(x->0)frac(g(x)-g(0),x-0)cos 1/x =lim_(x->0) g'(0) cos 1/x = 0
+$
+
+
+
+
 
 #pagebreak()
 
@@ -1726,7 +1785,7 @@ $
 integral frac(x, x^3-1)dif x &= 1/3 ln abs(x-1) - 1/3 integral frac(x-1,x^2+x+1)dif x\
 &= 1/3 ln abs(x-1) - 1/3 integral frac(x+1/2-3/2,x^2+x+1)dif x\
 &= 1/3 ln abs(x-1) - 1/3 lr([1/2 integral frac(dif(x^2+x+1),x^2+x+1)-3/2 integral frac(1,(x+1/2)^2+(sqrt(3)/2)^2)dif x])\
-&= 1/3 ln abs(x-1)-1/6 ln(x^2+x+1) - sqrt(3)/3 arctan frac(2sqrt(3)(x+1/2),3) + C
+&= 1/3 ln abs(x-1)-1/6 ln(x^2+x+1) + sqrt(3)/3 arctan frac(2sqrt(3)(x+1/2),3) + C
 $
 
 
@@ -1846,7 +1905,7 @@ $
 
 $
 integral x^2 ln frac(1-x,1+x)dif x &= 1/3 integral ln frac(1-x,1+x)dif (x^3)\
-&= 1/3 (x^3 ln frac(1-x,1+x) + x^2 + ln abs(x^2-1) ) + C
+&= 1/3 (x^3 ln frac(1-x,1+x) - x^2 - ln abs(x^2-1) ) + C
 $
 
 #prob-box[求不定积分 $ integral frac(x ln(x+sqrt(1+x^2)), sqrt(1+x^2))dif x $]
@@ -1858,13 +1917,13 @@ integral frac(x ln(x+sqrt(1+x^2)), sqrt(1+x^2))dif x &= integral ln(x+sqrt(1+x^2
 &= sqrt(1 + x^2) ln (x + sqrt(1 + x^2)) - x + C
 $
 
-#prob-box[求不定积分 $ integral frac(1,(1+x^2)^2)dif x $]
+#prob-box([求不定积分 $ integral frac(1,(1+x^2)^2)dif x $],label: <ex:4.1.95>)
 
 令$x= tan t, dif x = sec^2 t dif t$
 
 $
 integral frac(1,(1+x^2)^2)dif x &= integral cos^2 t dif t \
-&= 1/2 arctan x - 1/2 frac(x,1+x^2) + C
+&= 1/2 arctan x + 1/2 frac(x,1+x^2) + C
 $
 
 #prob-box[求不定积分$ integral arctan(x^2) dif x $]
@@ -1885,10 +1944,10 @@ integral frac("e"^(arctan x), (1+x^2)^(3/2))dif x &= integral "e"^t cos t dif t\
 &= 1/2 "e"^(arctan x) frac(1+x,sqrt(1+x^2))+C
 $
 
-#prob-box[求不定积分$ integral "e"^(2x) sin^x dif x $]
+#prob-box[求不定积分$ integral "e"^(2x) sin^2 x dif x $]
 
 $
-integral "e"^(2x) sin^x dif x &= integral "e"^(2x) (1-cos 2x)dif x\
+integral "e"^(2x) sin^2 x dif x &= integral "e"^(2x) (1-cos 2x)dif x\
 &= 1 / 4 "e"^(2 x) - 1 / 8 ("e"^(2 x) cos 2 x + "e"^(2 x) sin 2 x) + C 
 $
 
@@ -2054,6 +2113,8 @@ $
 
 #prob-box[求不定积分 $ integral sqrt(1+"e"^(2x))dif x $]
 
+(法一)
+
 $
 integral sqrt(1+"e"^(2x))dif x &= integral frac(1+"e"^(2x),sqrt(1+"e"^(2x))) dif x\
 &= integral frac(1,sqrt(1+"e"^(2x)))dif x + 1/2 integral frac(1,sqrt(1+"e"^(2x)))dif "e"^(2x)\
@@ -2075,6 +2136,29 @@ x - ln(1+sqrt(1+"e"^(2x))) &= x - ln (frac("e"^(2x),sqrt(1+"e"^(2x))-1))\
 $
 
 这正是我们想要的结果.
+
+(法二) 
+
+令$"e"^x = t = tan u, dif t = sec^2 u dif u$
+
+$
+integral sqrt(1+"e"^(2x))dif x &= integral sqrt(frac(t^2+1,t^2))dif t\
+&= frac(1,sin u cos^2 u)dif u\
+&= frac(sin u, sin^2 u cos^2 u)dif u\
+&= - integral frac(1,(1-cos^2 u)cos^2 u)dif cos u\
+&= sec u - 1/2 ln abs(frac(1- cos u,1+ cos u))
+$
+
+注意到$display(tan^2 x/2 =  frac(1-cos x,1+cos x) = frac(sin^2 x,(1+cos x)^2))$
+
+$
+sec u - 1/2 ln abs(frac(1- cos u,1+ cos u)) &= sec u + 1/2 ln abs(frac(1+ cos u,1- cos u))\
+&= sec u + ln abs(frac(sin u , 1+ cos u))\
+&= sqrt(1+"e"^(2x)) + ln (frac("e"^x,sqrt(1+"e"^(2x))+1))\
+&= sqrt(1+"e"^(2x)) + x - ln(sqrt(1+"e"^(2x))+1)
+$
+
+这正是(方法一)所得出的结果.
 
 #prob-box([求不定积分 $ integral "e"^x sqrt(1+"e"^(2x))dif x $], label: <ex:4.1.117>)
 
@@ -2122,7 +2206,7 @@ $
 
 #star-prob-box[求不定积分 $ integral frac(1+ln x,x^(-x)+x^x)dif x $]
 
-分子分母同时除以$x^x$
+分子分母同时除以$x^(-x)$
 
 $
 integral frac(1+ln x,x^(-x)+x^x)dif x = integral frac(x^x (1+ln x),1+(x^x)^2)dif x
@@ -2618,16 +2702,145 @@ integral frac(1,x^2)sqrt(frac(1-x,1+x))dif x &= integral frac(1,x^2 sqrt(1-x^2))
 &= - frac(sqrt(1-x^2),x) - ln abs(frac(1-sqrt(1-x^2),x))+C
 $
 
+= 定积分
+
+== 定积分计算题
+
+#prob-box[求定积分 $ integral_0^1 x^2 sqrt(1-x^2)dif x $]
+
+令$x = sin t , 0 <= t <= pi/2$
+
+$
+I = integral_0^1 x^2 sqrt(1-x^2)dif x = integral_0^(pi/2) sin^2 t sqrt(1-sin^2 t) cos t dif t\
+$
+
+因为$display(sqrt(1-sin^2 t) >= 0)$
+
+$
+I = 1/4 integral_0^(pi/2) sin^2 2 t dif t = pi/16
+$
+
+#prob-box[求定积分 $ integral_0^4 frac(ln x,sqrt(x))dif x $]
+
+$
+integral_0^4 frac(ln x,sqrt(x))dif x &= 2 integral_1^4 ln x dif sqrt(x)\
+&= 2 [lr(sqrt(x)ln x |)_1^4 - integral_1^4 frac(1,sqrt(x))dif x ]\
+&= 8 ln 2 -4 
+$
+
+#prob-box[求定积分 $ integral_0^1 floor("e"^x)dif x $]
+
+$x in [0,1], "e"^x in [1,"e"]$
+
+$
+floor("e"^x) = cases(1\,& -<= x < ln 2, 2\, & ln <= x <= 1)
+$
+
+$
+integral_0^1 floor("e"^x)dif x = integral_0^(ln 2)dif x + integral_(ln 2)^1 2 dif x = 2 - ln 2
+$
+
+#prob-box[求定积分 $ integral_0^(pi/2) frac(sin x,sin x + cos x)dif x $ ]
+
+#rect($ integral_0^(pi/2) f(sin x)dif x = integral_0^(pi/2) f(cos x)dif x $)
+
+$
+integral_0^(pi/2) frac(sin x,sin x + cos x)dif x &= integral_0^(pi/2) frac(cos x,cos x + sin x)dif x\
+&= 1/2 [integral_0^(pi/2) frac(sin x + cos x, sin x + cos x)dif x ]\
+&= pi/4
+$
+
+#prob-box[求定积分 $ integral_(pi/2)^(pi/2) (x^3 + sin^2 x)cos^2 x dif x $]
+
+$
+I &= integral_(pi/2)^(pi/2) x^3 cos^2 x dif x + integral_(pi/2)^(pi/2) sin^2 x cos^2 x dif x\
+&= 0 + 2 integral_0^(pi/2)cos^2 x dif x - 2 integral_0^(pi/2) cos^4 x dif x\
+&= pi/8
+$
+
+#prob-box[求定积分 $ integral_(-2 pi)^(4 pi) abs(sin^5 x)dif x $]
+
+根据周期性
+
+$
+I= 6 integral_0^(pi)sin^5 x dif x = 12 integral_0^(pi/2) sin^5 x dif x
+$
+
+根据Wallis公式, 有
+
+$
+I = 12 times 4/5 times 2/3 = 32/5
+$
+
+#prob-box[求反常积分 $ integral_1^(+oo) frac(1,x sqrt(x-1))dif x $]
+
+设$sqrt(x-1) = t, t in (0, +oo)$
+
+$
+integral_1^(+oo) frac(1,x sqrt(x-1))dif x = 2 integral_0^(+oo) frac(1,t^2+1)dif t = pi 
+$
+
+#prob-box[求反常积分$ integral_0^(+oo)frac(dif x,(1+x^2)^2)  $]
+
+根据 @ex:4.1.95 , 有
+
+$
+I = lr(1/2 arctan x|)_0^(+oo) + lr(frac(x,2(1+x^2))|)_0^(+oo) = pi/4
+$
 
 
+== 定积分概念题
 
+#prob-box[求极限$ lim_(n-> oo)(frac(1,n+1)+frac(1,n+2)+frac(1,n+3)+ dots + frac(1,n+n)) $]
 
+记原极限为$I$, 我们要对这个结构敏感: $display(integral_0^1 f(x)dif x = lim_(n->oo)1/n sum_(n=1)^(oo) f(i/n))$
 
+$
+I&=1/n (frac(1,1+1/n)+frac(1,1+2/n)+frac(1,1+3/n)+ dots + frac(1,1+n/n))\
+&= lim_(n->oo)1/n sum_(n=1)^(oo) f(frac(1,1+i/n))\
+&= integral_0^1 frac(1,1+x) dif x = ln 2
+$
 
+#prob-box[求极限$ lim_(n-> oo) n(frac(1,1+n^2)+frac(2^2,1+n^2)+ dots + frac(1,n^2+n^2)) $]
 
+$
+I &= lim_(n-> oo) 1/n (frac(1,1+(1/n)^2)+frac(1,1+(2/n)^2)+ dots + frac(1,1+(n/n)^2))\
+&= lim_(n-> oo) 1/n sum_(i=1)^n frac(1,1+(i/n)^2)\
+&= integral_0^1 frac(1,1+x^2)dif x = arctan x |_0^1 = pi/4
+$
 
+#prob-box[$p>0$, 计算积分$display(integral_0^(+oo) x"e"^(-p x)dif x)$
 
+#grid(
+  columns: (1fr, 1fr, 1fr, 1fr),  // 分为平分的左右两栏
+  row-gutter: 1em,    // 设置行间距，让公式看起来不拥挤
 
+[A. $p$],
+[B. $display(1/p)$],
+[C. $display(1/p^2)$],
+[D. $oo$],
+)
+]
+
+套公式即可
+
+== 定积分证明题
+
+#prob-box([讨论瑕积分$display(integral_(-1)^1 frac(1,x^2)dif x )$的敛散性],label:<ex:5.3.1> )
+
+注意到$x=0$是瑕积分的瑕点, 所以
+
+$
+integral_(-1)^1 frac(1,x^2)dif x &= integral_(-1)^0 frac(1,x^2)dif x + integral_(0)^1 frac(1,x^2)dif x
+$
+
+因为
+
+$
+integral_(-1)^0 1/(x^2)dif x = lr(-1/x |)_(-1)^0 = lim_(x->oo)(-1/x)-1  = +oo
+$
+
+所以瑕积分$display(integral_(-1)^1 frac(1,x^2)dif x )$发散.
 
 
 

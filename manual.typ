@@ -20,39 +20,6 @@
   it
 }
 
-// 快捷输入粗体
-/*
-#let vbr(x) = $bold(upright(#x))$
-
-#let aa = $vbr(a)$
-#let bb = $vbr(b)$
-#let cc = $vbr(c)$
-#let dd = $vbr(d)$
-#let ee = $vbr(e)$
-#let ff = $vbr(f)$
-#let gg = $vbr(g)$
-#let hh = $vbr(h)$
-#let ii = $vbr(i)$
-#let jj = $vbr(j)$
-#let kk = $vbr(k)$
-#let ll = $vbr(l)$
-#let mm = $vbr(m)$
-#let nn = $vbr(n)$
-//#let oo = $vbr(o)$
-#let pp = $vbr(p)$
-#let qq = $vbr(q)$
-#let rr = $vbr(r)$
-#let ss = $vbr(s)$
-#let tt = $vbr(t)$
-#let uu = $vbr(u)$
-#let vv = $vbr(v)$
-#let ww = $vbr(w)$
-#let xx = $vbr(x)$
-#let yy = $vbr(y)$
-#let zz = $vbr(z)$
-*/
-
-
 //Typst Logo
 #let typst = {
   set text(
@@ -228,6 +195,12 @@ bodyfmt: proof-bodyfmt,
   lang: "zh",
   region: "cn"
 )
+
+// 当触发 strong 样式时，将字体切换为黑体
+#show strong: set text(font: ("New Computer Modern", "SimHei"))
+
+// 数学字体设置
+//#show math.equation: set text(font: ("New Computer Modern Math", "SimSun"))
 
 //页码设置
 
@@ -525,7 +498,83 @@ $ (1+x)^alpha = 1 + alpha x + (alpha(alpha-1))/2! x^2 + o(x^2) $
 
 = 导数与微分
 
-//#pagebreak()
+== 基本导数公式
+
+#grid(
+  columns: (1fr, 1fr, 1fr),  // 分为平分的三栏
+  row-gutter: 1em,    // 设置行间距，让公式看起来不拥挤
+
+$(C)' = 0$,
+$(x^mu)' = mu x^(mu-1)$,
+$(sin x)'=cos x$,
+$(cos x)'=-sin x$,
+$(tan x)'=sec^2 x$,
+$(cot x)'=-csc^2 x$,
+$(sec x)'=sec x tan x$,
+$(csc x)'=-csc x cot x$,
+$(a^x)' = a^x ln a(a>0,a eq.not 1)$,
+$("e"^x)="e"^x$,
+$display((log_a x)'=frac(1,x ln a))(a>0,a eq.not 1)$,
+$display((ln x)'=1/x)$,
+$display((arcsin x)'=frac(1,sqrt(1-x)))$,
+$display((arccos x)'=-frac(1,sqrt(1-x)))$,
+$display((arctan x)'=frac(1,1+x^2))$,
+$display((op("arccot") x)'=-frac(1,1+x^2) )$,
+)
+
+== 导数的定义
+
+函数$f(x)$在$x_0$处的导数定义
+
++ $ f'(x_0)=lim_(Delta x -> 0)frac(f(x_0+Delta x)-f(x_0),Delta x) $
+
++ $ f'(x_0)=lim_(x->x_0)frac(f(x)-f(x_0),x-x_0) $
+
++ $ f'(x_0)=frac(f[x_0+phi(x)]-f(x_0),phi(x)),lim_(x->x_0)phi(x)=0 $ 
+
+== 隐函数求导
+
++ 直接法: 把因变量$y$视为$y(x)$, 对两边$x$同时求导
+
++ 公式法: $display(frac(dif y,dif x) = - frac(F'_x (x,y),F'_y (x,y)))$
+
+== 参数方程求导
+
++ 一阶导数: $display(frac(dif y,dif x)=frac(dif y,dif t)dot frac(dif t,dif x))$
+
++ 二阶导数: $display(frac(dif^2 y,dif x^2)=frac(dif y',dif x)=frac(dif y',dif t)dot frac(dif t,dif x))$
+
+== 变限积分求导公式
+
++ $display(F(x) = integral_a^x f(t)dif t), F'(x)=f(x)$
+
++ $display(F(x)=integral_a^(g(x))f(t)dif t), F'(x)=f[g(x)]g'(x)$
+
++ $display(F(x)=integral_(h(x))^a f(t)dif t), F'(x)=-f[h(x)]h'(x)$
+
++ $display(F(x)=integral_(h(x))^(g(x))f(t)dif t), display(F'(x)=integral_a^(g(x))f(t)dif t + integral_h(x)^a f(t)dif t) = F[g(x)]g'(x)-f[h(x)]h'(x)$
+
++ $display(F(x)=integral_a^x f(t)g(x)dif t)$
+
+$display(F'(x)=[g(x)integral_a^x f(t)]' = g'(x) integral_a^x f(t) + f(x)g(x))$
+
+== 高阶导数求导公式
+
++ $display( ("e"^(a x + b))^((n)) = a^n "e"^(a x + b)     )$
+
++ $display( [sin(a x + b)]^((n)) = a^n sin(a x + b + frac(n pi, 2)) )$
+
++ $display( [cos(a x + b)]^((n)) = a^n cos(a x + b + frac(n pi, 2)) )$
+
++ $display( (frac(1,a x + b))^((n)) = frac((-1)^n a^n n!,(a x + b)^n)  )$
+
++ $display( [ln(a x + b)]^((n)) = frac((-1)^(n-1)a^n (n-1)!,(a x+b)^n) )$
+
+== Leibniz 公式
+
+$display( (f g)^n = sum_(k=0)^n binom(n,k) f^((n-k))g^k )$
+
+#pagebreak()
 
 = 不定积分
 
@@ -771,6 +820,200 @@ $display(integral "e"^(a x) tan b x)$
 
   $display(frac("e"^x,x) = frac(x"e"^x-"e"^x,x^2))$
 )
+
+= 定积分
+
+== 定积分计算公式
+
+#el.isolated-resume-enum[
+
+#left-eq[ + $ integral_0^(pi/2) f(sin x)dif x = integral_0^(pi/2) f(cos x)dif x #<int_cal_01> $ ]
+
+#proof[用区间再现公式证明]
+
+#left-eq[ + $ integral_0^pi f(sin x)dif x = 2 integral_0^(pi/2) f(sin x)dif x $]
+
+#left-eq[ + $ integral_0^pi f(abs(cos x))dif x = 2 integral_0^(pi/2) f(cos x)dif x $]
+
+#left-eq[ + (Wallis 积分)$ I_n = integral_0^(pi/2) sin^n x dif x = integral_0^(pi/2) cos^n x dif x = cases(display(frac(n-1,n)dot frac(n-3,n-2) dots.c 1/2 dot text(fill: #rgb("F000F0"),pi/2))\, #h(1em) & n "is even",display(frac(n-1,n)dot frac(n-3,n-2) dots.c 2/3 dot 1)\, & n "is odd")  $]
+
+#left-eq[ + (区间再现公式) $ integral_a^b f(x)dif x = integral_a^b f(a+b-x)dif x = 1/2 integral_a^b [f(x)+f(a+b-x)]dif x $]
+
+]
+
+== 定积分计算技巧
+
+#el.isolated-resume-enum[
++ 对称性(奇偶性)
+
+设$f(x)$在$[-a,a]$上连续, 则有
+
+$
+integral_(-a)^a f(x)dif x = integral_0^a [f(x)+f(-x)]dif x = cases(display(2integral_0^a f(x)dif x)\,&若 f(x)"为偶函数",0\, & 若 f(x)"为奇函数")
+$
+
+因为$display(f(x)=frac(f(x)+f(-x),2) + frac(f(x)-f(-x),2))$, 所以有
+
+$
+integral_(-a)^(a)f(x)dif x = integral_(-a)^a frac(f(x)+f(-x),2)dif x = integral_0^a f(x)+f(-x)dif x
+$
+
+#el.resume() //继续序号
++ 周期性
+
+设$f(x)$是连续函数, 周期为$T$, 则
+
+$forall a$, 有
+
+- 
+$
+integral_a^(a+T) f(x) dif x = integral_0^T f(x)dif x = integral_(-T/2)^(T/2)f(x)dif x = dots.c
+$
+
+-
+$
+n in bb(N)_+ , "有" integral_a^(a+n T)f(x)dif x = n integral_0^T f(x)dif x
+$
+]
+
+== 定积分的概念
+
+#theorem("定积分的运算性质")[
+设$f(x),g(x)$在$[a,b]$上可积, 则  
+  $ integral_a^b [f(x)+g(x)]dif x = integral_a^b f(x)dif x + integral_a^b g(x)dif x $
+$ integral_a^b k f(x)dif x = k integral_a^b f(x)dif x, k in bb(R) $
+]
+
+#theorem("定积分的区间可加性")[
+  设$f(x)$在$[a,b]$上可积, $c in [a,b]$, 则
+  $
+  integral_a^b f(x)dif x = integral_a^c f(x)dif x + integral_c^b f(x)dif x
+  $
+]
+
+#theorem("定积分的比较性质")[
+  设函数$f(x)$在区间$[a,b]$上可积, 且$f(x)>=0$, 则$display(integral_a^b f(x)dif x >= 0)$
+]
+
+#corollary("定积分的保序性")[设$f(x),g(x)$在$[a,b]$上可积, 并且$f(x)<=g(x)$, 则
+$ integral_a^b f(x)dif x <= integral_a^b g(x)dif x $
+]
+
+#corollary("定积分绝对值不等式")[
+  设函数$f(x)$在$[a,b]$上可积, 那么函数$abs(f(x))$在$[a,b]$上也可积, 并且函数$abs(f(x))$在$[a,b]$上也可积, 并有
+  $ abs(integral_a^b f(x)dif x) <= integral_a^b abs(f(x))dif x   $
+]
+
+#corollary("定积分估值定理")[
+  设函数$f(x)$在$[a,b]$上可积, 且存在常数$m$和$M$, 满足不等式$m<=f(x)<=M$, 则
+  $ m(b-a)<= integral_a^b f(x)dif x <= M(b-a) $
+]
+
+== 定积分的几何意义
+
+- $display(integral_0^a sqrt(a^2-x^2)dif x = 1/4 pi a^2)$
+
+- $display(integral_0^a sqrt(2a x - x^2)dif x = integral_0^a sqrt(a^2 - (x-a)^2)dif x = 1/4 pi a^2)$
+
+== 反常积分
+
+#el.isolated-resume-enum[
+
++ 无穷区间反常积分
+
+设$F(x)$是$f(x)$在相应区间上的一个原函数
+
+(1)若$display(integral_a^(+oo)f(x)dif x = lim_(x->+oo)F(x)-F(a)  )$极限存在, 称反常积分收敛, 否则发散
+
+(2)若$display(integral_(-oo)^b f(x)dif x = F(b) - lim_(x->-oo)F(x)  )$极限存在, 称反常积分收敛, 否则发散
+
+(3)若$display(integral_(-oo)^b f(x)dif x = integral_(-oo)^(x_0) f(x)dif x + integral_(x_0)^(+oo) f(x)dif x  )$右端的两个积分都收敛, 称反常积分收敛, 否则发散
+
+#el.resume() //继续序号
++ 无界函数的反常积分(瑕积分)
+
+瑕点: 使$f(x)$无界的点
+
+(1)若$x=a$是瑕点, 则$display(integral_a^b f(x)dif x = F(b) - lim_(x->a^+)F(x))$极限存在, 称反常积分收敛, 否则发散
+
+(2)若$x=b$是瑕点, 则$display(integral_a^b f(x)dif x = lim_(x->b^-)F(x) - F(a))$极限存在, 称反常积分收敛, 否则发散
+
+(3)若$c in (a,b)$是瑕点, 则$display(integral_a^b f(x)dif x = integral_a^c f(x)dif x + integral_c^b f(x)dif x)$右端的两个积分都收敛, 称反常积分收敛, 否则发散
+]
+
+== 反常积分的性质与判定
+
+#el.isolated-resume-enum[
+
++ (线性性质I) 若无穷积分$display(integral_a^(+oo)f(x)dif x)$收敛, 则对$forall k in bb(R)$, 有$display(integral_a^(+oo)k f(x)dif x)$收敛, 且 #v(.5em) $display(integral_a^(+oo)k f(x)dif x =k integral_a^(+oo)f(x)dif x )$
+
++ (线性性质II) 若无穷积分$display(integral_a^(+oo)f(x)dif x)$与$display(integral_a^(+oo)g(x)dif x)$收敛, 则无穷积分 #v(.5em) $display(integral_a^(+oo)[f(x)   plus.minus g(x)]dif x  )$也收敛, 且$display(integral_a^(+oo)[f(x)   plus.minus g(x)]dif x = integral_a^(+oo)f(x)dif x plus.minus integral_a^(+oo)g(x)dif x)$
+
++ 若$a>0$, 则
+
+$
+integral_a^(+oo)frac(dif x,x^p) = cases( display(frac(a^(1-p),p-1)\,&p>1),+oo\,&p<=1)
+$
+
+特别地$display(integral_1^(+oo)frac(dif x,x^p) = cases( display(frac(1,p-1)\,&p>1),+oo\,&p<=1))$
+
+#v(.5em)
+
+#proof[ $display(integral_a^(+oo)frac(dif x,x^p) =  lim_(x->+oo) frac(1,1-p)x^(1-p) - frac(a^(1-p),1-p) )$, 当$1-p>=0$, 发散; $1-p<0$, 收敛  ]
+
+#v(.5em)
+
+#el.resume() //继续序号
++ 若$a>1$, 则
+
+$
+integral_a^(+oo)frac(dif x,x ln^p x) = cases(display(frac(ln^(1-p)a,p-1))\,&p>1,+oo\,&p<=1)
+$
+
+#v(.5em)
+
+特别地$display(integral_e^(+oo)frac(dif x,x ln^p x) = cases(display(frac(1,p-1))\,&p>1,+oo\,&p<=1)
+)$
+
+#v(.5em)
+
+#el.resume() //继续序号
++ #{ 
+  set math.equation(numbering: none)
+  $ integral_0^(+oo) x"e"^(-k x)dif x = cases(display(1/(k^2)\,&k>0),+oo\,&k<=0) $
+  }
+
+#v(.5em)
+
+#proof[ $ integral_0^(+oo) x"e"^(-k x)dif x &= - lr((x"e"^(-k x))/k|)_0^(+oo) - lr(("e"^(-k x))/k^2|)_0^(+oo)\
+ &= -1/k lim_(x->+oo)x"e"^(-k x)- 1/k^2 lim_(x->+oo)"e"^(-k x)+1/k^2 $]
+
+一般地, $display(integral_0^(+oo) x^n"e"^(-k x)dif x(n>0))$, 当$k>0$收敛, 当$k<=0$时发散
+
+#el.resume() //继续序号
++ #{ 
+  set math.equation(numbering: none)
+  $ integral_a^b frac(dif x,(x-a)^q) = cases(display(frac((b-a)^(1-q),1-q))\,&q<1,+oo\,&q>=1) $
+  }
+]
+
+== 判断反常积分敛散性
+
++ 设函数$f(x), g(x)$在区间$[a,+oo]$上连续, 并且$0<=f(x)<=g(x)(a<=x<+oo)$, 则
+
+  ① 当$display(integral_a^(+oo)g(x)dif x)$收敛时, $display(integral_a^(+oo)f(x)dif x)$收敛 
+
+  ② 当$display(integral_a^(+oo)f(x)dif x)$发散时,  $display(integral_a^(+oo)g(x)dif x)$发散
+
+#strong["大收小收, 小散大散"]
+
+
+
+
+
+
+
+
 
 
 
